@@ -9,12 +9,7 @@ export class JobAlertServiceStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
-    const jobAlertServiceLambda = new lambdaPython.PythonFunction(this, 'JobAlertFunction', {
-      runtime: lambda.Runtime.PYTHON_3_9,
-      handler: 'index.handler',
-      entry: 'lambda/job_alert_service_function',
-      functionName: 'JobAlertServiceLambdaFunction'
-    });
+
 
     const pipeline = new CodePipeline(this, 'JobAlertServicePipeline', {
       pipelineName: 'JobAlertServicePipeline',
@@ -26,32 +21,28 @@ export class JobAlertServiceStack extends cdk.Stack {
       })
     });
 
-    pipeline.addStage(new LambdaDeploymentStage(this, 'Deploy', {
-      lambdaFunction: jobAlertServiceLambda,
-    }));
+    pipeline.addStage(new LambdaDeploymentStage(this, 'Deploy'));
   }
 }
 
 class LambdaDeploymentStage extends cdk.Stage {
-  public readonly lambdaFunction: lambda.IFunction;
 
-  constructor(scope: Construct, id: string, props: { lambdaFunction: lambda.IFunction }) {
+  constructor(scope: Construct, id: string) {
     super(scope, id);
-
-    // Pass the lambda function
-    this.lambdaFunction = props.lambdaFunction;
-
-    new LambdaDeploymentStack(this, 'LambdaDeploymentStack', {
-      lambdaFunction: this.lambdaFunction,
-    });
+    new LambdaDeploymentStack(this, 'LambdaDeploymentStack');
   }
 }
 
 class LambdaDeploymentStack extends cdk.Stack {
-  constructor(scope: Construct, id: string, props: { lambdaFunction: lambda.IFunction }) {
+  constructor(scope: Construct, id: string) {
     super(scope, id);
 
-    const { lambdaFunction } = props;
+    const lambdaFunction = new lambdaPython.PythonFunction(this, 'JobAlertFunction', {
+      runtime: lambda.Runtime.PYTHON_3_9,
+      handler: 'index.handler',
+      entry: 'lambda/job_alert_service_function',
+      functionName: 'JobAlertServiceLambdaFunction'
+    });
 
     const api = new apigateway.LambdaRestApi(this, 'JobAlertApi', {
       handler: lambdaFunction,
