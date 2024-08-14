@@ -13,6 +13,7 @@ export class JobAlertServiceStack extends cdk.Stack {
       runtime: lambda.Runtime.PYTHON_3_9,
       handler: 'index.handler',
       entry: 'lambda/job_alert_service_function',
+      functionName: 'JobAlertServiceLambdaFunction'
     });
 
     const pipeline = new CodePipeline(this, 'JobAlertServicePipeline', {
@@ -57,6 +58,7 @@ class LambdaDeploymentStack extends cdk.Stack {
       proxy: false
     });
 
+    // Define API resources and methods
     const jobAlertResource = api.root.addResource('job-alert');
     jobAlertResource.addMethod('POST');  // POST /job-alert triggers the Lambda
   }
