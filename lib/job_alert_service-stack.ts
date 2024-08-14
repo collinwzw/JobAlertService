@@ -1,15 +1,14 @@
 import * as cdk from 'aws-cdk-lib';
 import { Construct } from 'constructs';
-import {CodePipeline, CodePipelineSource, ShellStep} from "aws-cdk-lib/pipelines";
+import { CodePipeline, CodePipelineSource, ShellStep } from 'aws-cdk-lib/pipelines';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as lambdaPython from '@aws-cdk/aws-lambda-python-alpha';
-
+import * as apigateway from 'aws-cdk-lib/aws-apigateway';
 
 export class JobAlertServiceStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
-    // Define the Lambda function
     const jobAlertServiceLambda = new lambdaPython.PythonFunction(this, 'JobAlertFunction', {
       runtime: lambda.Runtime.PYTHON_3_9,
       handler: 'index.handler',
@@ -26,14 +25,12 @@ export class JobAlertServiceStack extends cdk.Stack {
       })
     });
 
-    // Add the Lambda deployment stage
     pipeline.addStage(new LambdaDeploymentStage(this, 'Deploy', {
       lambdaFunction: jobAlertServiceLambda,
     }));
   }
 }
 
-// Define a new Stage for deploying the Lambda function
 class LambdaDeploymentStage extends cdk.Stage {
   public readonly lambdaFunction: lambda.IFunction;
 
@@ -49,9 +46,18 @@ class LambdaDeploymentStage extends cdk.Stage {
   }
 }
 
-// Define a Stack for deploying the Lambda function
 class LambdaDeploymentStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props: { lambdaFunction: lambda.IFunction }) {
     super(scope, id);
+
+    const { lambdaFunction } = props;
+
+    const api = new apigateway.LambdaRestApi(this, 'JobAlertApi', {
+      handler: lambdaFunction,
+      proxy: false
+    });
+
+    const jobAlertResource = api.root.addResource('job-alert');
+    jobAlertResource.addMethod('POST');  // POST /job-alert triggers the Lambda
   }
 }
