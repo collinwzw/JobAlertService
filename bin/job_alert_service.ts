@@ -7,6 +7,6 @@ const app = new cdk.App();
 new JobAlertServiceStack(app, 'JobAlertServiceStack', {
     env: {
         account: '767398124820',
-        region: 'eu-west-1',
+        region: 'us-east-1',
     }
 });

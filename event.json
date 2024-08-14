@@ -1,0 +1,73 @@
+{
+  "resource": "/{proxy+}",
+  "path": "/my/path",
+  "httpMethod": "GET",
+  "headers": {
+    "Accept": "application/json",
+    "Content-Type": "application/json",
+    "Host": "1234567890.execute-api.us-east-1.amazonaws.com",
+    "User-Agent": "curl/7.64.1",
+    "X-Amzn-Trace-Id": "Root=1-5f84f27b-86c8b4fbc44c8e02f946ed76",
+    "X-Forwarded-For": "192.168.0.1",
+    "X-Forwarded-Port": "443",
+    "X-Forwarded-Proto": "https"
+  },
+  "multiValueHeaders": {
+    "Accept": [
+      "application/json"
+    ],
+    "Content-Type": [
+      "application/json"
+    ]
+  },
+  "queryStringParameters": {
+    "param1": "value1",
+    "param2": "value2"
+  },
+  "multiValueQueryStringParameters": {
+    "param1": [
+      "value1"
+    ],
+    "param2": [
+      "value2"
+    ]
+  },
+  "pathParameters": {
+    "proxy": "my/path"
+  },
+  "stageVariables": {
+    "stageVarName": "stageVarValue"
+  },
+  "requestContext": {
+    "resourceId": "resourceId",
+    "resourcePath": "/{proxy+}",
+    "httpMethod": "GET",
+    "extendedRequestId": "extendedRequestId",
+    "requestTime": "10/Oct/2020:00:00:00 +0000",
+    "path": "/dev/my/path",
+    "accountId": "123456789012",
+    "protocol": "HTTP/1.1",
+    "stage": "dev",
+    "domainPrefix": "1234567890",
+    "requestTimeEpoch": 1602288000000,
+    "requestId": "requestId",
+    "identity": {
+      "cognitoIdentityPoolId": null,
+      "accountId": null,
+      "cognitoIdentityId": null,
+      "caller": null,
+      "sourceIp": "192.168.0.1",
+      "principalOrgId": null,
+      "accessKey": null,
+      "cognitoAuthenticationType": null,
+      "cognitoAuthenticationProvider": null,
+      "userArn": null,
+      "userAgent": "curl/7.64.1",
+      "user": null
+    },
+    "domainName": "1234567890.execute-api.us-east-1.amazonaws.com",
+    "apiId": "1234567890"
+  },
+  "body": null,
+  "isBase64Encoded": false
+}

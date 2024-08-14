@@ -1,0 +1,30 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+
+Resources:
+  JobAlertFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: index.handler
+      Runtime: python3.9
+      CodeUri: lambda/job_alert_service_function/
+      Description: A Lambda function for handling job alerts
+      MemorySize: 128
+      Timeout: 10
+      Environment:
+        Variables:
+          ENV_VAR_NAME: value
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /job-alert
+            Method: post
+
+Outputs:
+  JobAlertApi:
+    Description: "API Gateway endpoint URL for Prod stage"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/job-alert/"
+  JobAlertFunctionArn:
+    Description: "ARN of the JobAlertFunction Lambda Function"
+    Value: !GetAtt JobAlertFunction.Arn
